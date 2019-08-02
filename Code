@@ -1,7 +1,6 @@
 import random
 
 # caracter_sheet
-hero_name = (input("A hősöd neve:"'\n'))
 hero_stg = []
 hero_stam = []
 hero_luck = []
@@ -10,18 +9,68 @@ hero_gold = []
 hero_tresure = []
 hero_drink = []
 hero_items = []
-hero_bag = []
 
-# caracter_generate
-print("Üdvözöllek ebben a csodás kalandban! Elösször is karaktert kell alkotnod.")
-print("Most a rendszer dob neked egy kockával, hogy meghatározza az ügyességed.")
+#multi defunctions
+
+
+def potionchoose():
+    choosen_potion = int(input())
+    if choosen_potion == 1:
+        print("A választott italod az Ügyesség itala!")
+        hero_drink.append("ÜGYESSÉG ITALA")
+    elif choosen_potion == 2:
+        print("A választott italod az Életerő itala!")
+        hero_drink.append("ÉLETERŐ ITALA")
+    elif choosen_potion == 3:
+        print("A választott italod az Szerencse itala!")
+        hero_drink.append("SZERENCSE ITALA")
+    else:
+        print("Üsd be a választott ital sorszámát:\n")
+
+
+def printmyhero ()
+    print ("A hősöd neve: " + str(hero_name)
+    print ("Jelenlegi és maximális ügyességed: " + str(hero_stg[0] + "/" hero_stg[1])
+    print ("Jelenlegi és maximális életerőd: " + str(hero_stam[0] + "/" hero_stam[1])
+    print ("Jelenlegi és maximális szerencséd: " + str(hero_luck[0] + "/" hero_luck[1])
+    print ("A táskádban " + str(hero_food[0]) + " étkezésre elegendő étel van.")
+    print ("Az erszényedben " + str(hero_gold[0]) + " aranytallér lapul.")
+    print ("Utad során az alábbi kincsekre tettél szert: " + str(hero_tresure[0:))"
+    !!!!!!!!!!if hero_drink == van ital
+    print ("A kaland kezdetétől magaddal hordozod varázsitalod: " + str(hero_drink[0]))
+    else:
+    print ("Varázsitalodat már elfogyasztottad")
+    print ("Rendelkezésedre álló egyéb felszerelések: " + hero_items[0:])
+    
+ 
+def roll_one ()
+    choosen_number_one = int(input(print("Dobj egy kockával! Ezt most úgy te meg, hogy bírsz egy általad választott számot: \n"))
+    for x in range(1):
+    hero_latestroll_one = int((random.randint(1, 9999)))
+    dice = (int(hero_latestroll_one) + int (choosen_number_one)) % 6
+    if dice == 0
+    finalnumber = 6
+    else:
+    finalnumber = dice
+    print: ("A döbött szám: " + str(finalnumber) + " !")
+
+
+# caracter_generate_name
+print("Üdvözöllek ebben a csodás kalandban! Hogy elkezd a játékot, elösször is karaktert kell alkotnod.")
+hero_name = print(input("Kérlek, nevezd el a hősöd: \n")
+
+# caracter_generate_stg
+print (str(hero_name) + ", utad során számos veszély leselkedi rád, melyekkel szemben ügyességed vetheted be.")
+print("Határozzuk meg a kezdeti ügyességed értékét.")
+roll_one ()
 print("~~Kocka csörgés~~")
-for x in range(1):
-    hero_latestroll = (random.randint(1, 6))
-print("A dobott összeg: " + str(hero_latestroll) + " amihez hozzá adunk hatot. A kapott szám lesz az ügyességed.")
-print("A játék alatt ez az érték fog csökkeni vagy nőni, de e kezdeti érték felé csak speciális esetben mehet")
-hero_stg.append(int(hero_latestroll) + int(6))
+print("A dobott összeg: " + str(finalnumber) + " amihez hozzá adunk hatot. A kapott szám lesz az ügyességed.")
+print("A játék alatt ez az érték fog csökkeni vagy nőni, de e kezdeti érték felé csak speciális esetben mehet.")
+hero_stg.append(int(finalnumber) + int(6))
+hero_stg.append(int(finalnumber) + int(6))
 print("A játék kezdetén az ügyességed: " + str(hero_stg[0]))
+
+# caracter_generate_stg
 print(input("Üss entert a folytatáshoz!"))
 print("Most a rendszer dob neked két kockával, hogy meghatározza az életerőd.")
 print("~~Kocka csörgés~~")
@@ -50,19 +99,7 @@ print("3. Szerencse itala = kezdeti értékére állítja SZERENCSE pontjaidat �
 print("Üsd be a választott ital sorszámát:\n")
 
 
-def potionchoose():
-    choosen_potion = int(input())
-    if choosen_potion == 1:
-        print("A választott italod az Ügyesség itala!")
-        hero_drink.append("ÜGYESSÉG ITALA")
-    elif choosen_potion == 2:
-        print("A választott italod az Életerő itala!")
-        hero_drink.append("ÉLETERŐ ITALA")
-    elif choosen_potion == 3:
-        print("A választott italod az Szerencse itala!")
-        hero_drink.append("SZERENCSE ITALA")
-    else:
-        print("Üsd be a választott ital sorszámát:\n")
+
         potionchoose()
 
 
