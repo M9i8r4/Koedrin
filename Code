@@ -1,6 +1,7 @@
 import random
 
 # caracter_sheet
+hero_name = []
 hero_stg = []
 hero_stam = []
 hero_luck = []
@@ -10,7 +11,11 @@ hero_tresure = []
 hero_drink = []
 hero_items = []
 
-#multi defunctions
+# caracter_variables
+roll_numbers = []
+finalnumber = []
+
+# multi defunctions
 
 
 def potionchoose():
@@ -25,85 +30,105 @@ def potionchoose():
         print("A választott italod az Szerencse itala!")
         hero_drink.append("SZERENCSE ITALA")
     else:
-        print("Üsd be a választott ital sorszámát:\n")
-        
-        
-!!!!def use_potion ()
-    if hero_drink[0] == "ERŐ ITALA"
-    elif:
-    hero_drink[0] == "ÜGYESSÉG ITALA"
-    elif:
-    hero_drink[0] == "SZERENCSE ITALA"
+        print("A beírt szám nem megfelelő, próbáld újra!")
+        potionchoose()
 
 
-def printmyhero ()
-    print ("A hősöd neve: " + str(hero_name)
-    print ("Jelenlegi és maximális ügyességed: " + str(hero_stg[0] + "/" hero_stg[1])
-    print ("Jelenlegi és maximális életerőd: " + str(hero_stam[0] + "/" hero_stam[1])
-    print ("Jelenlegi és maximális szerencséd: " + str(hero_luck[0] + "/" hero_luck[1])
-    print ("A táskádban " + str(hero_food[0]) + " étkezésre elegendő étel van.")
-    print ("Az erszényedben " + str(hero_gold[0]) + " aranytallér lapul.")
-    print ("Utad során az alábbi kincsekre tettél szert: " + str(hero_tresure[0:))"
-    !!!!!!!!!!if hero_drink == van ital
-    print ("A kaland kezdetétől magaddal hordozod varázsitalod: " + str(hero_drink[0]))
+# def use_potion ():
+
+# def fight ():
+
+def player_help():
+    doplayerneedhelp = str(input())
+    if doplayerneedhelp == str("HELP"):
+        print("Segítek!")
     else:
-    print ("Varázsitalodat már elfogyasztottad")
-    print ("Rendelkezésedre álló egyéb felszerelések: " + hero_items[0:])
-    
- 
-def roll_one ()
-    choosen_number_one = int(input(print("Dobj egy kockával! Ezt most úgy te meg, hogy bírsz egy általad választott számot: \n"))
-    for x in range(1):
-    hero_latestroll_one = int((random.randint(1, 9999)))
-    dice = (int(hero_latestroll_one) + int (choosen_number_one)) % 6
-    if dice == 0
-    finalnumber = 6
+        pass
+
+
+def printmyhero():
+    print("A hősöd neve: " + str(hero_name[0]))
+    print("Jelenlegi ügyességed: " + str(hero_stg[0]) + '\n' + "Míg maximális értéke: " + str(hero_stg[1]))
+    print("Jelenlegi életerőd: " + str(hero_stam[0]) + '\n' + "Míg maximális értéke: " + str(hero_sam[1]))
+    print("Jelenlegi szerencséd: " + str(hero_luck[0]) + '\n' + "Míg maximális értéke: " + str(hero_luck[1]))
+    print("A táskádban " + str(hero_food[0]) + " étkezésre elegendő étel van.")
+    print("Az erszényedben " + str(hero_gold[0]) + " aranytallér lapul.")
+    print("Utad során az alábbi kincsekre tettél szert: " '\n' + str(hero_tresure))
+    if "ÜGYESSÉG ITALA" or "ÉLETERŐ ITALA" or "SZERENCSE ITALA" in hero_drink:
+        print("A kaland kezdetétől magaddal hordozod varázsitalod: " + str(hero_drink))
     else:
-    finalnumber = dice
-    print: ("A döbött szám: " + str(finalnumber) + " !")
+        print("Varázsitalodat már elfogyasztottad")
+    print("Rendelkezésedre álló egyéb felszerelések: " + str(hero_items))
 
 
-# caracter_generate_name
+def roll_one():
+    roll_numbers.clear()
+    finalnumber.clear()
+    while True:
+        try:
+            temp_roll = int(input("Dobj egy kockával! Ezt most úgy te meg, hogy bírsz egy általad választott számot: \n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            break
+    roll_numbers.append(temp_roll)
+    temp_rolltwo = int((random.randint(1, 9999)))
+    roll_numbers.append(temp_rolltwo)
+    dice = (int(roll_numbers[0]) + int(roll_numbers[1])) % 6
+    if dice == 0:
+        finalnumber.append(6)
+    else:
+        finalnumber.append(dice)
+    print("~~ Kockacsörgés ~~")
+    print("A dobött szám: " + str(finalnumber) + " !")
+
+
 print("Üdvözöllek ebben a csodás kalandban! Hogy elkezd a játékot, elösször is karaktert kell alkotnod.")
-hero_name = print(input("Kérlek, nevezd el a hősöd: \n")
+temp_name = str(input("Kérlek, nevezd el a hősöd: \n"))
+hero_name.append(temp_name)
 
-# caracter_generate_stg
-print (str(hero_name) + ", utad során számos veszély leselkedi rád, melyekkel szemben ügyességed vetheted be.")
+print(str(hero_name[0]) + ", utad során számos veszély leselkedi rád, melyekkel szemben ügyességed vetheted be.")
 print("Határozzuk meg a kezdeti ügyességed értékét.")
-roll_one ()
-print("~~Kocka csörgés~~")
-print("A dobott összeg: " + str(finalnumber) + " amihez hozzá adunk hatot. A kapott szám lesz az ügyességed.")
+roll_one()
+print("A dobott számhoz hozzá adunk hatot. A kapott szám lesz az ügyességed.")
 print("A játék alatt ez az érték fog csökkeni vagy nőni, de e kezdeti érték felé csak speciális esetben mehet.")
-hero_stg.append(int(finalnumber) + int(6))
-hero_stg.append(int(finalnumber) + int(6))
+hero_stg.append(int(finalnumber[0]) + int(6))
+hero_stg.append(int(finalnumber[0]) + int(6))
 print("A játék kezdetén az ügyességed: " + str(hero_stg[0]))
 
-# caracter_generate_stam
 print("Most határozzuk meg az életerődet.")
-roll_one ()
-print("~~Kocka csörgés~~")
-print("A dobott összeg: " + str(finalnumber) + " amihez hozzá adunk tizenkettőt. A kapott szám lesz az életerőd.")
+roll_one()
+print("A dobott számhoz hozzá adunk tizenkettőt. A kapott szám lesz az életerőd.")
 print("A játék alatt ez az érték fog csökkeni és nőni, de e kezdeti érték felé csak speciális esetben mehet.")
-hero_stam.append(int(finalnumber) + int(12))
-hero_stam.append(int(finalnumber) + int(12))
+hero_stam.append(int(finalnumber[0]) + int(12))
+hero_stam.append(int(finalnumber[0]) + int(12))
 print("A játék kezdetén az életerőd: " + str(hero_stam[0]))
 
-# caracter_generate_luck
 print("Most határozzuk meg a szerencsédet")
-roll_one ()
-print("~~Kocka csörgés~~")
-print("A dobott összeg: " + str(finalnumber) + " amihez hozzá adunk hatot. A kapott szám lesz a szerencséd.")
+roll_one()
+print("A dobott számhoz hozzá adunk hatot. A kapott szám lesz a szerencséd.")
 print("A játék alatt ez az érték fog csökkeni és nőni, de e kezdeti érték felé csak speciális esetben mehet.")
-hero_luck.append(int(finalnumber) + int(6))
-hero_luck.append(int(finalnumber) + int(6))
+hero_luck.append(int(finalnumber[0]) + int(6))
+hero_luck.append(int(finalnumber[0]) + int(6))
 print("A játék kezdetén a szerencséd: " + str(hero_luck[0]))
-
-# caracter_generate_luck
 
 print("A kalandra magaddal vihetsz egy varázsitalt is. Az alábbiak közül váaszthatsz:")
 print("1. Ügyesség itala = kezdeti értékére állítja ÜGYESSÉG pontjaidat.")
 print("2. Erő itala = kezdeti értékére állítja ÉLETERŐ pontjaidat.")
 print("3. Szerencse itala = kezdeti értékére állítja SZERENCSE pontjaidat és 1 ponttal növeli induló SZERENCSÉDET.")
-print("Üsd be a választott ital sorszámát:\n")
+
 potionchoose()
 
+print("Minimális felszereléssel kezded kalandodat, de utad során találhatsz vagy vásárolhatsz holmikat.")
+print("Karddal vagy felfegyverezve, és bőrpáncélt viselsz.")
+print("Hátizsákodban két étkezésre elég étel, ital található és azok a kincsek, amelyeket késöbb megszerzel.")
+hero_items.extend(["KARD", "BŐRPÁNCÉL"])
+hero_food.append(int(2))
+
+print("Játszottál már hasonló játékkal? Esetleg kérdésed van?")
+print("A játék során számos esetben van lehetőséged önálló döntést hozni, de hogy ezt megtedd, ismerned kell ")
+print("a megfelelő parancsokat. A továbbiakban a ha beütöd hogy 'HELP' bármikor választ kaphatsz kérdéseidre.")
+print("Ha nincs szükséged segítségre, de a játék mégis megáll, csak üss egy entert a folytatáshoz.")
+print("Ha gondolod, próbáld ki most a menürendszert. Ellenkező esetben kezdődjön a kaland!")
+player_help()
