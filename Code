@@ -1,59 +1,168 @@
 import random
 
 # caracter_sheet
-hero_name = []
-hero_stg = []
-hero_stam = []
-hero_luck = []
-hero_food = []
-hero_gold = []
-hero_tresure = []
-hero_drink = []
-hero_items = []
+hero_name = []  # A hős neve
+hero_stg = []   # A hős altuális / maximális ügyessége
+hero_stam = []  # A hős altuális / maximális életereje
+hero_luck = []  # A hős altuális / maximális szerencséje
+hero_food = [10]  # A hős altuális élelme
+hero_gold = [0]   # A hős altuális aranya
+hero_tresure = []  # A hős altuális kicsei, zsákmányau
+hero_drink = []   # A hős birtokában lévő varázsital
+hero_items = []  # A hős felszerelési tárgyai, felszerelése
 
 # caracter_variables
-roll_numbers = []
-finalnumber = []
-
-# multi defunctions
-
+roll_numbers = [0]  # átmenetileg tárolja a dobott számokat
+finalnumber = [0]  # dobókocka 1-6-ig terjedő eredménye
+isfighting = [0]  # harc esetén értéke 1
+enemy_healt = [0]   # harc esetén tárolja az ellenfél aktuális életerejét
+enemy_stg = [0]     # harc esetén tárolja az ellenfél ügyességét
+enemy_roll_number = [0]
+enemy_final_number = [0]
+player_atk = [0]
+enemy_atk = [0]
 
 def potionchoose():
-    choosen_potion = int(input())
-    if choosen_potion == 1:
-        print("A választott italod az Ügyesség itala!")
-        hero_drink.append("ÜGYESSÉG ITALA")
-    elif choosen_potion == 2:
-        print("A választott italod az Életerő itala!")
-        hero_drink.append("ÉLETERŐ ITALA")
-    elif choosen_potion == 3:
-        print("A választott italod az Szerencse itala!")
-        hero_drink.append("SZERENCSE ITALA")
+    while True:
+        try:
+            choosen_potion = int(input())
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if choosen_potion == 1:
+                print("A választott italod az Ügyesség itala!")
+                hero_drink.append("ÜGYESSÉG ITALA")
+                break
+            elif choosen_potion == 2:
+                print("A választott italod az Életerő itala!")
+                hero_drink.append("ÉLETERŐ ITALA")
+                break
+            elif choosen_potion == 3:
+                print("A választott italod az Szerencse itala!")
+                hero_drink.append("SZERENCSE ITALA")
+                break
+            else:
+                print("A beírt szám nem megfelelő, próbáld újra!")
+                continue
+
+
+def eat():
+    if isfighting[0] == 0:
+        if hero_food[0] > 0:
+            hero_food[0] = hero_food[0] - 1
+            hero_stam[0] = hero_stam[0] + 4
+            if hero_stam[0] > hero_stam[1]:
+                hero_stam[0] = hero_stam[1]
+            else:
+                pass
+            print("Megettél egy élelmet! A hátizsákodban így " + str(hero_food[0]) + " étkezésre elegendő étel maradt!\nAktuális életerőd: " + str(hero_stam[0]))
+        else:
+            print("Nincs elég élelmed!")
     else:
-        print("A beírt szám nem megfelelő, próbáld újra!")
-        potionchoose()
+        print("A pillanat nem alkalmas arra, hogy étkezz!")
+    player_help()
 
 
-# def use_potion ():
+def use_potion():
+    if "ÜGYESSÉG ITALA" in hero_drink:
+        hero_drink.clear()
+        hero_stg[0] = hero_stg[1]
+        print("Elhasználtad varázsitalod! Így jelenlegi / maximális ügyességed: " + str(hero_stg[0]) + "/" + str(hero_stg[1]))
+    elif "ÉLETERŐ ITALA" in hero_drink:
+        hero_drink.clear()
+        hero_stam[0] = hero_stam[1]
+        print("Elhasználtad varázsitalod! Így jelenlegi / maximális életerőd: " + str(hero_stam[0]) + "/" + str(hero_stam[1]))
+    elif "SZERENCSE ITALA" in hero_drink:
+        hero_drink.clear()
+        hero_luck[0] = hero_luck[1]
+        print("Elhasználtad varázsitalod! Így jelenlegi / maximális szerencséd: " + str(hero_luck[0]) + "/" + str(hero_luck[1]))
+    else:
+        print("Varázsitalodat korábban már elfogyasztottad!")
+    player_help()
 
-# def fight ():
+
+def fight1():
+    print("\nKEZDŐDJÖN A HARC!\n")
+    while True:
+        try:
+            int(enemy_healt[0]) > int(0) and int(hero_stam[0]) > int(0)
+        except ValueError:
+            print("valami gond van")
+            continue
+        else:
+            roll_one()
+            print("Támadóértéked ebben a fordulóban: " + str(int(hero_stg[0])+int(finalnumber[0])))
+            player_atk[0] = int(hero_stg[0])+int(finalnumber[0])
+            roll_one()
+            print("Ellenfeled támadóértéked ebben a fordulóban: " + str(int(enemy_stg[0]) + int(finalnumber[0])))
+            enemy_atk[0] = int(enemy_stg[0]) + int(finalnumber[0])
+            if int(player_atk[0]) > int(enemy_atk[0]):
+                print("A fordulót megnyerted! Ellenfeled sérült 2 életerő pontot!")
+                enemy_healt[0] = enemy_healt[0] - int(2)
+                continue
+            elif int(enemy_atk[0]) > int(player_atk[0]):
+                print("A fordulót ellenfeled nyerte! Sérülsz 2 életerő pontot!")
+                hero_stam[0] = hero_stam[0] - int(2)
+                continue
+            elif int(enemy_atk[0]) == int(player_atk[0]):
+                print("Kivédtétek egymás támadását!")
+                continue
+            else:
+                print("valami gond van2")
+                continue
+    if int(enemy_healt[0]) > int(0):
+        print("A közdelmet ellenfeled nyerte. Számodra a kaland itt véget ért")
+        lose()
+    else:
+        print("Megnyerted a küzdelmet!")
+        player_help()
+
+
+def lose():
+    print("game over!")
+    player_help()
+
 
 def player_help():
     doplayerneedhelp = str(input())
     if doplayerneedhelp == str("HELP"):
-        print("Segítek!")
+        temp_input = int(input("Mi érdekel? \n1. A harcok menete \n2. Szerncse használata csatában \n3. Tárgyak használata és gyorsparancsok.\n4. Játék folyatatása. \nÜsd le a megfelelő sorszámot!\n"))
+        if temp_input == 1:
+            print("Sűrűn találsz majd olyan oldalakat, ahol azt az utasítást kapod, hogy küzdjél meg valamilyen teremtménnyel. \nLehet, hogy lesz választási lehetőséged, de ha nem, vagy ha úgy döntesz, hogy vállalod a harcot, azt a következő módon kell megvívnod:\n\nA teremtmények pontszámait minden alkalommal megadja a könyv, amikor összecsapsz valamelyikükkel.\n1. A gép dob két kockával a teremtmény nevében. A kapott számhoz hozzá adja a lény ÜGYESSÉG pontjaihoz. Az összeg az ellenfeled TÁMADÓEREJE.\n2. Dobj két kockával most magadnak, és az eredményt add saját jelenlegi ÜGYESSÉG pontjaidhoz. Ez a te TÁMADÓERŐD.\n3. Ha a te TÁMADÓERŐD nagyobb, mint a teremtményé, akivel küzdesz, megsebezted. Menj tovább a 4. lépésre. Ha a teremtmény TÁMADÓEREJE nagyobb, ő sebzett meg téged, és haladj az 5. lépéshez.\nHa a két TÁMADÓERŐ egyforma, kivédtétek egymás csapását, és a következő Fordulót az 1. lépéstől elölről kezditek.\n4. Megsebezted a teremtményt, ezért vonj le 2 pontot ÉLETEREJÉBŐL. Felhasználhatod SZERENCSÉDET is, hogy további sebeket ejts rajta (lásd odébb).\n5. A teremtmény sebzett meg téged, ezért vonj le 2 pontot saját ÉLETERŐDBŐL. De ilyenkor is lehet SZERENCSÉD.\n6. Kezdd el a következő Fordulót meglévő ÜGYESSÉG pontjaiddal, azaz ismételd meg a lépéseket 1-5-ig. Ezt mindaddig megteheted, amíg vagy a te, vagy a teremtmény ÉLETERŐ pontjai nem fogynak el (halál).")
+        elif temp_input == 2:
+            print("A könyv bizonyos oldalain felszólítunk, hogy Tedd próbára SZERENCSÉD, és közöljük, hogy SZERENCSÉD volt vagy sem.\nA csatákban mindig te döntesz, hogy a SZERENCSÉD segítségével megpróbálsz-e komolyabb sebet ejteni azon a teremtményen, amelyet épp megsebeztél, vagy annak a sebnek a hatását csökkenteni, amelyet a teremtménytől kaptál. Ha te sebezted meg a teremtményt, a fent leírt módon Tedd próbára a SZERENCSÉD.\nHa szerencsés vagy, komoly sebet ejtettél rajta, 2 külön pontot levonhatsz a teremtmény ÉLETEREJÉBŐL.\nAzonban, ha balszerencsés vagy, a seb puszta karcolás, 1 pontot vissza kell adnod ellenfeled ÉLETERŐ pontjaihoz.\nHa a teremtmény sebzett meg téged, azért teszed próbára SZERENCSÉDET, hogy csökkentsd a sebet. \nHa SZERENCSÉD van, sikerült elkerülnöd a teljes csapást. Ekkor 1 pontot visszaadsz magadnak.  (2 pontos kár helyett csak 1 pontos kár keletkezett ÉLETERŐDBEN), Ha nem voltál SZERENCSÉS, komolyabb találat ért.\n1 plusz ÉLETERŐ pontot vonjál le magadtól. Ne feledd, hogy minden alkalommal le kell vonnod 1 pontot adott SZERENCSE pontszámodból, ahányszor Próbára teszed SZERENCSÉD!")
+        elif temp_input == 3:
+            print("Amikor lehetőséged nyílik a HELP parancsal ezt a menüt kihozni, helyette, dönthetsz úgy,\nhogy valamely alábbi utasítást adod, és halytod végre. A teljes parancslista:\n"
+                  "KARAKTER : Megmutatja a teljes karakterlapodat\n"
+                  "ÉTEL : Elfogyaszt egy rendelkezésedre álló ételt és így gyógyul 2 életerőt\n"
+                  "VARÁZSITAL : Elfogyasztja a rendelkezésedre álló varázsitalodat\n")
+        elif temp_input == 4:
+            pass
+        else:
+            print("Hibás szám! A játék folytatódik!")
+        player_help()
+    elif doplayerneedhelp == str("KARAKTER"):
+        printmyhero()
+        player_help()
+    elif doplayerneedhelp == str("ÉTEL"):
+        eat()
+        player_help()
+    elif doplayerneedhelp == str("VARÁZSITAL"):
+        use_potion()
+        player_help()
     else:
         pass
 
 
 def printmyhero():
     print("A hősöd neve: " + str(hero_name[0]))
-    print("Jelenlegi ügyességed: " + str(hero_stg[0]) + '\n' + "Míg maximális értéke: " + str(hero_stg[1]))
-    print("Jelenlegi életerőd: " + str(hero_stam[0]) + '\n' + "Míg maximális értéke: " + str(hero_sam[1]))
-    print("Jelenlegi szerencséd: " + str(hero_luck[0]) + '\n' + "Míg maximális értéke: " + str(hero_luck[1]))
+    print("Jelenlegi / maximális ügyességed: " + str(hero_stg[0]) + "/" + str(hero_stg[1]))
+    print("Jelenlegi / maximális életerőd: " + str(hero_stam[0]) + "/" + str(hero_stam[1]))
+    print("Jelenlegi / maximális szerencséd: " + str(hero_luck[0]) + "/" + str(hero_luck[1]))
     print("A táskádban " + str(hero_food[0]) + " étkezésre elegendő étel van.")
     print("Az erszényedben " + str(hero_gold[0]) + " aranytallér lapul.")
-    print("Utad során az alábbi kincsekre tettél szert: " '\n' + str(hero_tresure))
+    print("Utad során az alábbi kincsekre tettél szert:\n" + str(hero_tresure))
     if "ÜGYESSÉG ITALA" or "ÉLETERŐ ITALA" or "SZERENCSE ITALA" in hero_drink:
         print("A kaland kezdetétől magaddal hordozod varázsitalod: " + str(hero_drink))
     else:
@@ -84,9 +193,109 @@ def roll_one():
     print("A dobött szám: " + str(finalnumber) + " !")
 
 
-print("Üdvözöllek ebben a csodás kalandban! Hogy elkezd a játékot, elösször is karaktert kell alkotnod.")
+def n1():
+    print("Az izgatott nézők moraja lassan elhalkul mögötted, amint egyre mélyebbre merészkedsz a barlangfolyosó homályába. \nHúszméterenként vastag kristályok csüngnek a barlang tetejéről, lágy fényt sugározva, épp eleget ahhoz, hogy lásd, merre haladsz. \nAhogy szemed hozzászokik a csaknem teljes sötétséghez, körben minden felé mozgást látsz. \nPókok és bogarak másznak fel-le a vésett falakon és tűnnek el gyorsan nyílásokban és repedésekben közeledtedre. \nPatkányok és egerek szaladgálnak a földön előtted. Vízcseppek hullnak kis tócsákba hátborzongató hanggal, \namely végigvisszhangzik az alagúton. A levegő hideg, párás, nyirkos. Miután öt percet haladtál lassan az alagútban, \negy kőasztalhoz érsz, amely a bal oldali fal mellett áll. Hat doboz van rajta, \negyikükre a te neved festették. Mit teszel?")
+    player_help()
+    while True:
+        try:
+            temp_choose = int(input("1. Kinyitod a dobozt \n2. Továbbhaladsz észak felé\n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if temp_choose == 1:
+                n207()
+                break
+            elif temp_choose == 2:
+                n66()
+                break
+            else:
+                print("Érvénytelen választás!")
+                continue
+
+
+def n66():
+    print("Néhány perc gyaloglás után egy elágazáshoz érsz az alagútban.\nEgy, a falra festett fehér nyíl nyugat felé mutat. A földön nedves lábnyomok jelzik, merre haladtak az előtted járók.\nNehéz biztosan megmondani, de úgy tűnik, hogy három közülük a nyíl irányába halad, míg egyikük úgy döntött, \nhogy keletnek megy. Mehetsz innen NYUGAT felé, de mehetsz KELETNEK is.")
+    player_help()
+    while True:
+        try:
+            temp_choose = int(input("1. Nyugat \n2. Kelet\n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if temp_choose == 1:
+                n293()
+                break
+            elif temp_choose == 2:
+                n119()
+                break
+            else:
+                print("Érvénytelen választás!")
+                continue
+
+
+def n114():
+    print(WIN)
+    player_help()
+
+
+def n119():
+    print("A játék e iránya nincs megirva! Fordulj vissza!")
+    n66()
+
+
+def n137():
+    print("A játék e iránya nincs megirva! Fordulj vissza!")
+    n293()
+
+
+def n207():
+    print("A doboz teteje könnyedén nyílik. Benne két arany-pénzt találsz, és egy üzenetet,\namely egy kis pergamenen neked szól. Előbb zsebre vágod az ara-nyakat, \naztán elolvasod az üzenetet: - „Jól tetted. Legalább volt annyi eszed, \nhogy megállj és elfogadd az ajándékot. Most azt tanácsolom neked, \nhogy keress és használj különféle tárgyakat, \nha sikerrel akarsz áthaladni Halállabirintusomon.” \nAz aláírás Szukumvit. \nMegjegyzed a tanácsot, apró darabokra téped a pergament, és továbbmész ÉSZAK felé.\n")
+    hero_gold[0] = hero_gold[0] + 2
+    player_help()
+    n66()
+
+
+def n293():
+    print("A három pár nedves lábnyomot követve az alagút nyugati elágazásában hamarosan egy újabb el-ágazáshoz érsz. \nTovább mehetsz NYUGAT felé a lábnyomokat követve, vagy mehetsz ÉSZAK felé, a harmadik pár lábnyom után.")
+    player_help()
+    while True:
+        try:
+            temp_choose = int(input("1. Tovább nyugat \n2. Észak\n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if temp_choose == 1:
+                n137()
+                break
+            elif temp_choose == 2:
+                n387()
+                break
+            else:
+                print("Érvénytelen választás!")
+                continue
+
+
+def n387():
+    print("Hallod, hogy elölről súlyos lépések közelednek. Egy széles, állatbőrökbe öltözött, kőbaltás, primitív lény lép elő. \nAhogy meglát, morog, a földre köp, majd a kőbaltát felemelve közeledik, és mindennek kinéz, csak barátságosnak nem. \nElőhúzod kardodat, és felkészülsz, hogy megküzdj a Barlangi Emberrel.\n")
+    isfighting[0] = int(1)
+    player_help()
+    print("Ellenfeled:\nBARLANGI EMBER \nÜgyesség: 7 \nÉleterő: 7")
+    enemy_healt[0] = int(7)
+    enemy_stg[0] = int(7)
+    fight1()
+    n114()
+
+#  névválasztás
+
+print("Ennek a történetnek Te vagy a hőse.Te vívsz meg a kocka segítségével óriásokkal és szörnyekkel, magad döntesz, hogy\nmerre haladj tovább, kivel barátkozz, csatázz.Nem pusztán az író fantáziája irányítja a történetet, hanem a te bátorságod, kíváncsiságod, leleményességed, kalandvágyad és józan eszed is.\nJáték és regény egyszerre, amelyet olvasol.\nKalandos vállalkozás, amelybe belebukni is lehet, de ha jól döntesz, sikerrel jársz.\nLovagok, óriások, nindzsák, barbár harcosok, varázslók, szörnyetegek népesítik be ezt a fantasztikus világot.\nMi kell ahhoz, hogy ne bukj el közöttük? Csak az, ami a mindennapi élethez is: ügyesség, jártasság, ötletesség; az, hogy felkészülten várd a nehézségeket. \nÉs szerencse, amely nélkül az előző három talán mit sem ér, de ha csak erre számítasz, biztosan cserbenhagy. \nHogy mit jelent az ÜGYESSÉG, ÉLETERŐ és SZERENCSE ebben a történetben, megtudod a következőkből, Ha netán nem lenne teljesen világos a dolog, ne törődj vele.Bátran előre!")
+print("\n\nHogy elkezd a játékot, elösször is karaktert kell alkotnod.")
 temp_name = str(input("Kérlek, nevezd el a hősöd: \n"))
 hero_name.append(temp_name)
+
+#  ügyesség megahatározása
 
 print(str(hero_name[0]) + ", utad során számos veszély leselkedi rád, melyekkel szemben ügyességed vetheted be.")
 print("Határozzuk meg a kezdeti ügyességed értékét.")
@@ -97,6 +306,8 @@ hero_stg.append(int(finalnumber[0]) + int(6))
 hero_stg.append(int(finalnumber[0]) + int(6))
 print("A játék kezdetén az ügyességed: " + str(hero_stg[0]))
 
+#  életerő megahatározása
+
 print("Most határozzuk meg az életerődet.")
 roll_one()
 print("A dobott számhoz hozzá adunk tizenkettőt. A kapott szám lesz az életerőd.")
@@ -105,6 +316,8 @@ hero_stam.append(int(finalnumber[0]) + int(12))
 hero_stam.append(int(finalnumber[0]) + int(12))
 print("A játék kezdetén az életerőd: " + str(hero_stam[0]))
 
+#  szerencse megahatározása
+
 print("Most határozzuk meg a szerencsédet")
 roll_one()
 print("A dobott számhoz hozzá adunk hatot. A kapott szám lesz a szerencséd.")
@@ -112,6 +325,8 @@ print("A játék alatt ez az érték fog csökkeni és nőni, de e kezdeti ért�
 hero_luck.append(int(finalnumber[0]) + int(6))
 hero_luck.append(int(finalnumber[0]) + int(6))
 print("A játék kezdetén a szerencséd: " + str(hero_luck[0]))
+
+#  give basic items
 
 print("A kalandra magaddal vihetsz egy varázsitalt is. Az alábbiak közül váaszthatsz:")
 print("1. Ügyesség itala = kezdeti értékére állítja ÜGYESSÉG pontjaidat.")
@@ -126,9 +341,35 @@ print("Hátizsákodban két étkezésre elég étel, ital található és azok a
 hero_items.extend(["KARD", "BŐRPÁNCÉL"])
 hero_food.append(int(2))
 
+# game info
+
 print("Játszottál már hasonló játékkal? Esetleg kérdésed van?")
 print("A játék során számos esetben van lehetőséged önálló döntést hozni, de hogy ezt megtedd, ismerned kell ")
 print("a megfelelő parancsokat. A továbbiakban a ha beütöd hogy 'HELP' bármikor választ kaphatsz kérdéseidre.")
 print("Ha nincs szükséged segítségre, de a játék mégis megáll, csak üss egy entert a folytatáshoz.")
 print("Ha gondolod, próbáld ki most a menürendszert. Ellenkező esetben kezdődjön a kaland!")
 player_help()
+
+#  (elő)Történet
+
+print("Fang közönséges kisváros volt Csiang Mai északi tartományban. A Kok folyó partján fekszik, és így \nmindig is megfelelő megállóhelynek bizonyult a folyami kereskedők és utazók számára az év nagy részében. Néhány bárka, tutaj és időnként \nmég egy-egy nagyobb vitorlás hajó is megszokott látvány volt Fang kikötőjében. De mindez rég volt, \na Bajnokok Próbája meghirdetése előtt. Most viszont évente egyszer a folyó zsúfolásig megtelik \ncsónakokkal, minthogy az emberek több száz kilométer távolságból is eljönnek, reménykedve, hogy tanúi \nlesznek egy régi hagyomány megtörésének, és hogy lássák a Bajnokok Próbájának győztesét. \nMinden év május elsején harcosok és hősök jönnek Fangba, hogy kockára tegyék életüket. \nKicsi az esélye annak, hogy túlélik, mégis sokan vállalják a kockázatot, mert a díj nagy: \negy 10 000 arannyal teli láda és Csiang Mai szabadsága mindörökké. De Bajnokká lenni nem könnyű vállalkozás. \nNéhány évvel ezelőtt egy nagyhatalmú fangi báró, bizonyos Szukumvit elhatározta, \nhogy városát nevezetessé teszi. Meghirdette hát a küzdelmek küzdelmét.")
+player_help()
+print("A helybéliek segítségével labirintust építtetett a város melletti hegy mélyén, amelynek mindössze egyetlen \nkijárata volt. A labirintust százféle agyafúrt, életveszélyes csapdával és gyűlöletes szörnyeteggel töltötte meg. Szukumvit olyan \naprólékos részletességgel tervezte meg a járatokat, hogy annak, aki a siker reményében akar \nszembenézni a kihívással, elméjét ugyanolyan jól kelljen használnia, mint a fegyverét. Amikor biztos \nvolt abban, hogy minden tökéletes, kipróbálta labirintusát. Kiválasztotta tíz legjobb testőrét, és azok\n állig felfegyverkezve nekivágtak a föld alatti utaknak. Soha többé nem látták őket. \nA szerencsétlenül járt testőrök híre hamar elterjedt az országban. Ezt követően Szukumvit \nmeghirdette az első Bajnokok Próbáját. Hírnökök és hirdetmények adták ország-világ tudtára a kihívást: \nTíz-ezer arany és Csiang Mai örökös szabadsága, ha valaki túléli a fangi labirintus szörnyűségeit. \nAz első évben tizenhét bátor harcos kísérelte meg a lehetetlent. Egyikük sem bukkant elő. \nAhogy múltak az évek, a Bajnokok Próbája egyre több és több jelentkezőt és nézőt vonzott.")
+player_help()
+print("Fang virágzott, és már hónapokkal előre készülődött a látványosságra, amelynek minden májusban házigazdája volt. \nA várost feldíszítették, sátrakat állítottak, étkezőcsarnokokat építettek, zenészeket, táncosokat, tűznyelőket, \nilluzionistákat és mindenfajta egyéb mutatványost fogadtak fel, és gyűjtötték a labirintusnak nekivágni \nszándékozó, reménykedő jelentkezők nevezését. Április utolsó hetében Fang népe és az odalátogató \nidegenek már ünnepeltek. Mindenki énekelt, ivott, táncolt és nevetett, amíg el nem jött május első napja, \namikor a város a labirintus kapujához vonult, hogy lássa, amint az első bátor vállalkozó \nelőrelép, hogy induljon a Bajnokok Próbáján. Miután megpillantottad Szukumvit egy fára \nszögezett felhívását, elhatározod, hogy ez évben te is megkísérled a Próbát. Öt éve vonz a gondolat, \nnem is a jutalom miatt, hanem azért, mert eddig senkinek sem sikerült megbirkóznia a labirintussal. \nMeggyőződésed, hogy ez lesz az az év, amelyben Bajnokot koronáznak. \nÖsszecsomagolva kevés holmidat, azonnal útra kelsz.")
+player_help()
+print("Kétnapi gyaloglással eljutsz a nyugati parthoz, az elátkozott Feketehomok kikötőbe. Nem vesztegetsz időt erre a \nrabló-fészekre. Kellő pénzért fel jutsz egy kis hajóra, amely észak felé hajózik, oda, ahol a Kok folyó a tengerbe \nömlik. Onnan, egy, a folyón fölfelé haladó tutajra szállsz, és négy nap múlva végül megérkezel Fangba. \nA Próba három nap múlva kezdődik, és a város már szinte hisztérikus izgalomban van. Jelentkezel a \nhatóságoknál, és egy ibolyaszínű kendőt kapsz, amely a karodra kötve mindenkivel tudatja státusodat. \nHárom napon keresztül élvezed Fang kitüntető vendég szeretetét, és szinte félistenként kezelnek. \nA nagy vidámság közepette csaknem elfelejted, miért is jöttél Fangba, de a Próba \nelőtti este már a reád váró feladat nagysága foglalja el gondolataidat. Egy különleges vendégházba vezetnek, \nés megmutatják a szobádat. Kellemes baldachinos ágy van benne, szatén ágyneművel, \nhogy kipihenhesd magad. De nincs sok időd az alvásra. Napfelkelte előtt trombitaszó ébreszt vad álmaidból, \namelyekben lángoló vermeket és óriási fekete pókokat láttál.")
+player_help()
+print("Percekkel később kopogtatnak az ajtón, és egy hang így szól: „Próbatételed hamarosan megkezdődik. Kérünk, légy \nkész tíz percen belül!” Felkelsz, az ablakhoz lépsz, és kinyitod a zsalugátert. Az utca már zsúfolásig tele emberek-kel, \nakik csöndesen haladnak a hajnali ködben -kétségkívül nézők, akik úton vannak a labirintushoz, \nbizakodva, hogy jó helyet találnak maguknak, ahonnan láthatják a versenyzőket. Elfordulsz, és az asztalhoz \nlépsz, amelyen megbízható kardod fekszik. Felkapod, és egy erőteljeset suhintasz vele, azon \ngondolkodva, vajon milyen fenevaddal kell nemsokára éles pengéjének megbirkóznia. \nAztán kinyitod a folyosóra vezető ajtót. Egy ferde szemű kis ember üdvözöl mély meghajlással, ami-kor \nkilépsz a hálószobádból. „Kövess, kérlek” -mondja. Balra fordul, és gyors léptekkel megindul \na folyosó végén levő lépcsők felé. A vendégházat elhagyva keskeny sikátorba tér, és igencsak szedned kell a lábad, \nhogy lépést tarts vele. Hamarosan egy széles, poros útra értek, \namelyet éljenzők tömege határol.")
+player_help()
+print("Amikor meglátják ibolyaszínű kendődet, még hangosabban éltetnek, és virágokat szórnak rád. Az elöl állók hosszú \nárnyéka egyre rövidebb lesz, ahogy a nap egyre magasabbra emelkedik a reggeli égen. Amint ott állsz a zajos és vibráló \ntömeggel szemben, idegenül és egyedül érzed magad, tudatában vagy annak, milyen megpróbáltatások várnak rád. \nHirtelen valaki megrángatja az ingedet. Kis vezetőd az, aki sürgetve int, hogy kövesd. Magad \nelőtt látod kirajzolódni a hegy körvonalait és a mélyé be vezető alagút sötét száját. \nAhogy közelebb érsz, két hatalmas kőpillért pillantasz meg az alagút kapujának két oldalán. \nA pilléreket díszes faragások borítják: tekergő kígyók, démonok, istenségek, mind mintha csak némán \nfigyelmeztetné a veszélyre mindazokat, akik elhaladnak mellettük. Most megpillantod magát \nSzukumvit bárót a bejárat mellett állva, amint arra vár, hogy üdvözölje a Bajnokok Próbájának résztvevőit. \nÖt másik bajnokot látsz itt, amint büszkén állnak a sorban, ibolya-színű kendőjük kirakva, \nhogy mindenki lássa, kik ők. Kettő közülük mezítelen mellű, szőrökbe öltözött barbár.")
+player_help()
+print("Teljesen mozdulatlanul állnak, egyenes lábbal, előrenyújtott karjuk kétfejű csatabárdjuk hosszú nyelén nyugszik. \nEgy karcsú, aranyhajú, zöld macskaszemű lány tőrökkel teli övét igazgatja bőrszoknyája körül. A másik két férfi közül az \negyik testét tetőtől talpig vaslemezből készült pán-cél borítja, sisakján tollak, pajzsán címer, \ntársán fekete ruha van, egyedül sötét szeme látszik ki az arcát fedő fekete maszk mögül. (Hosszú kések, \negy drótgarott és egyéb csendes gyilkoló szer-számok csüngnek az övén.) Az öt versenyző alig \nészrevehető bólintással nyugtázza érkezésed, majd utolsónak fordulsz szembe \na megmámorosodott tömeggel. A tömeg hirtelen elcsendesül, amint Szukumvit báró előrelép. Hat bambuszrúd van \na kezében. Kihúzod az egyiket, és elolvasod, amit ráírtak: „Ötödik”. A Próba megkezdődik.")
+player_help()
+print("A lovag az első. Tiszteleg a tömegnek, mielőtt eltűnne az alagútban. Fél óra elteltével követi a lány. Majd a \nbarbár jön, azután a hidegvérű gyilkos. Most te kerülsz sorra, hogy elbúcsúzz a nézőktől. Felemeled az ibolyaszínű kendőt, \negy utol-só mély lélegzetet veszel a friss, hűvös levegőből, majd megfordulsz, és belépsz a \nkőoszlopos kapun Szukumvit birodalmába, ahol ismeretlen megpróbáltatások várnak rád a hatalmas báró \nHalállabirintusának útjain.")
+player_help()
+
+# Történet
+
+n1()
+
