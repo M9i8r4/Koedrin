@@ -21,6 +21,8 @@ enemy_roll_number = [0]
 enemy_final_number = [0]
 player_atk = [0]
 enemy_atk = [0]
+playerin_luck = [0]  # a karakternek éppen sikeres szerencse próbája volt. Értréke 1 ha igaz. 2 pedig ha balszerencsés.
+
 
 def potionchoose():
     while True:
@@ -82,40 +84,95 @@ def use_potion():
     player_help()
 
 
+def infightluck():
+    print("Úgy döntöttél próbára teszed szerencsédet, hogy sebzésedet növeld, esetleg sérülésed csökkentsd.")
+    if int(hero_luck[0]) == int(0):
+        print("Nincs elég szerencsepontod, hogy próbára tedd a szerencséd!")
+        player_help()
+    elif isfighting[0] == int(0):
+        print("Nem álsz csatában! Nincs lehetőséged próbára tenni a szerencséd.")
+        player_help()
+    else:
+        print("Ezt most két kockadobással kell elvégezni.")
+        roll_one()
+        temp_number1 = finalnumber[0]
+        roll_one()
+        temp_number2 = finalnumber[0]
+        rollluck = int(temp_number1) + int(temp_number2)
+        print("Szerencse próbád eredménye: " + str(rollluck) + ", míg szerencséd: " + str(hero_luck[0]))
+        if int(rollluck) <= hero_luck[0]:
+            print("Szerencséd van!")
+            hero_luck[0] = int(hero_luck[0]) - int(1)
+            playerin_luck[0] = int(1)
+        else:
+            print("Nincs szerencséd!")
+            hero_luck[0] = int(hero_luck[0]) - int(1)
+            playerin_luck[0] = int(2)
+
+
 def fight1():
     print("\nKEZDŐDJÖN A HARC!\n")
-    while True:
-        try:
-            int(enemy_healt[0]) > int(0) and int(hero_stam[0]) > int(0)
-        except ValueError:
-            print("valami gond van")
-            continue
-        else:
-            roll_one()
-            print("Támadóértéked ebben a fordulóban: " + str(int(hero_stg[0])+int(finalnumber[0])))
-            player_atk[0] = int(hero_stg[0])+int(finalnumber[0])
-            roll_one()
-            print("Ellenfeled támadóértéked ebben a fordulóban: " + str(int(enemy_stg[0]) + int(finalnumber[0])))
-            enemy_atk[0] = int(enemy_stg[0]) + int(finalnumber[0])
-            if int(player_atk[0]) > int(enemy_atk[0]):
-                print("A fordulót megnyerted! Ellenfeled sérült 2 életerő pontot!")
+    while (enemy_healt[0] > int(0) and hero_stam[0] > int(0)):
+        roll_one()
+        print("Támadóértéked ebben a fordulóban: " + str(int(hero_stg[0])+int(finalnumber[0])))
+        player_atk[0] = int(hero_stg[0])+int(finalnumber[0])
+        roll_one()
+        print("Ellenfeled támadóértéked ebben a fordulóban: " + str(int(enemy_stg[0]) + int(finalnumber[0])))
+        enemy_atk[0] = int(enemy_stg[0]) + int(finalnumber[0])
+        playerin_luck[0] = int(0)
+        player_help()
+        if int(player_atk[0]) > int(enemy_atk[0]):
+            print("A fordulót megnyerted!")
+            if playerin_luck[0] == int(0):
+                print("Ellenfeled sérült 2 életerő pontot!")
                 enemy_healt[0] = enemy_healt[0] - int(2)
+                print("Ellenfeled megmarad életereje: " + str(enemy_healt[0]) + " pont.")
                 continue
-            elif int(enemy_atk[0]) > int(player_atk[0]):
-                print("A fordulót ellenfeled nyerte! Sérülsz 2 életerő pontot!")
-                hero_stam[0] = hero_stam[0] - int(2)
+            elif playerin_luck[0] == int(1):
+                print("Ellenfeled sérült 3 életerő pontot, mivel szerencsés voltál!")
+                enemy_healt[0] = enemy_healt[0] - int(3)
+                print("Ellenfeled megmarad életereje: " + str(enemy_healt[0]) + " pont.")
                 continue
-            elif int(enemy_atk[0]) == int(player_atk[0]):
-                print("Kivédtétek egymás támadását!")
+            elif playerin_luck[0] == int(2):
+                print("Ellenfeled sérült 1 életerő pontot, mivel balszerencsés voltál!")
+                enemy_healt[0] = enemy_healt[0] - int(1)
+                print("Ellenfeled megmarad életereje: " + str(enemy_healt[0]) + " pont.")
                 continue
             else:
-                print("valami gond van2")
+                print("valami gond van3")
                 continue
+        elif int(enemy_atk[0]) > int(player_atk[0]):
+            print("A fordulót ellenfeled nyerte!")
+            if playerin_luck[0] == int(0):
+                print(" Sérülsz 2 életerő pontot!")
+                hero_stam[0] = hero_stam[0] - int(2)
+                print("Megmaradt életerőpontod: " + str(hero_stam[0]))
+                continue
+            elif playerin_luck[0] == int(1):
+                print("Csak 1 életerő pontot sérülsz, mivel szerencsés voltál!")
+                hero_stam[0] = hero_stam[0] - int(1)
+                print("Ellenfeled megmarad életereje: " + str(enemy_healt[0]) + " pont.")
+                continue
+            elif playerin_luck[0] == int(2):
+                print("3 életerő pontot sérülsz, mivel balszerencsés voltál!")
+                hero_stam[0] = hero_stam[0] - int(3)
+                print("Ellenfeled megmarad életereje: " + str(enemy_healt[0]) + " pont.")
+                continue
+            else:
+                print("valami gond van4")
+                continue
+        elif int(enemy_atk[0]) == int(player_atk[0]):
+            print("Kivédtétek egymás támadását!")
+            continue
+        else:
+            print("valami gond van2")
+            continue
     if int(enemy_healt[0]) > int(0):
         print("A közdelmet ellenfeled nyerte. Számodra a kaland itt véget ért")
         lose()
     else:
         print("Megnyerted a küzdelmet!")
+        isfighting[0] = int(0)
         player_help()
 
 
@@ -125,7 +182,7 @@ def lose():
 
 
 def player_help():
-    doplayerneedhelp = str(input())
+    doplayerneedhelp = str(input("\nÜSS ENTERT A TOVÁBBLÉPÉSHEZ, VAGY CSELEKEDJ BELÁTÁSOD SZERINT!\n"))
     if doplayerneedhelp == str("HELP"):
         temp_input = int(input("Mi érdekel? \n1. A harcok menete \n2. Szerncse használata csatában \n3. Tárgyak használata és gyorsparancsok.\n4. Játék folyatatása. \nÜsd le a megfelelő sorszámot!\n"))
         if temp_input == 1:
@@ -136,7 +193,8 @@ def player_help():
             print("Amikor lehetőséged nyílik a HELP parancsal ezt a menüt kihozni, helyette, dönthetsz úgy,\nhogy valamely alábbi utasítást adod, és halytod végre. A teljes parancslista:\n"
                   "KARAKTER : Megmutatja a teljes karakterlapodat\n"
                   "ÉTEL : Elfogyaszt egy rendelkezésedre álló ételt és így gyógyul 2 életerőt\n"
-                  "VARÁZSITAL : Elfogyasztja a rendelkezésedre álló varázsitalodat\n")
+                  "VARÁZSITAL : Elfogyasztja a rendelkezésedre álló varázsitalodat\n"
+                  "SZERENCSE : Csak harc közben használható! Próbára teszi a szerencséd\n")
         elif temp_input == 4:
             pass
         else:
@@ -150,6 +208,9 @@ def player_help():
         player_help()
     elif doplayerneedhelp == str("VARÁZSITAL"):
         use_potion()
+        player_help()
+    elif doplayerneedhelp == str("SZERENCSE"):
+        infightluck()
         player_help()
     else:
         pass
@@ -193,6 +254,12 @@ def roll_one():
     print("A dobött szám: " + str(finalnumber) + " !")
 
 
+def n0():
+    print("Leprogromozatlan irányávonalat választottál. Kalandod itt végetért")
+    print("A további probálkozás érdekében visszakerülsz az első kereszteződésbe.")
+    n66()
+
+
 def n1():
     print("Az izgatott nézők moraja lassan elhalkul mögötted, amint egyre mélyebbre merészkedsz a barlangfolyosó homályába. \nHúszméterenként vastag kristályok csüngnek a barlang tetejéről, lágy fényt sugározva, épp eleget ahhoz, hogy lásd, merre haladsz. \nAhogy szemed hozzászokik a csaknem teljes sötétséghez, körben minden felé mozgást látsz. \nPókok és bogarak másznak fel-le a vésett falakon és tűnnek el gyorsan nyílásokban és repedésekben közeledtedre. \nPatkányok és egerek szaladgálnak a földön előtted. Vízcseppek hullnak kis tócsákba hátborzongató hanggal, \namely végigvisszhangzik az alagúton. A levegő hideg, párás, nyirkos. Miután öt percet haladtál lassan az alagútban, \negy kőasztalhoz érsz, amely a bal oldali fal mellett áll. Hat doboz van rajta, \negyikükre a te neved festették. Mit teszel?")
     player_help()
@@ -212,6 +279,14 @@ def n1():
             else:
                 print("Érvénytelen választás!")
                 continue
+
+
+def n20():
+    print("Csak hihetetlen erőd tudja megakadályozni, hogy a mérges pók megharapjon. \nAzonban legyengülsz, és észreveszed, hogy remeg a kezed, amikor zsebre vágod az aranydarabot. \n1 pontot vonjál le ÜGYESSÉGEDBŐL. Megátkozod azt, aki leejtette a hátizsákot, és elindulsz észak felé.\n")
+    hero_stg[0] = int(hero_stg[0]) - int(1)
+    player_help()
+    print("Tovább haladsz...")
+    n279()
 
 
 def n66():
@@ -236,18 +311,49 @@ def n66():
 
 
 def n114():
-    print(WIN)
+    print("A barlanglakó bőr csuklóvédőt visel, amelyről négy kis patkánykoponya csüng alá. A\n ")
+    while True:
+        try:
+            temp_choose = int(input("1. CSUKLÓDRA TEHETED, \n2. de tovább is mehetsz ÉSZAKNAK.\n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if temp_choose == 1:
+                n336()
+                break
+            elif temp_choose == 2:
+                n298()
+                break
+            else:
+                print("Érvénytelen választás!")
+                continue
     player_help()
 
 
 def n119():
-    print("A játék e iránya nincs megirva! Fordulj vissza!")
-    n66()
+    n0()
 
 
 def n137():
-    print("A játék e iránya nincs megirva! Fordulj vissza!")
-    n293()
+    print("Ahogy végigmész az alagúton, csodálkozva látod, hogy egy jókora vasharang csüng alá a boltozatról.\n")
+    while True:
+        try:
+            temp_choose = int(input("1. MEGKONGATHATOD, \n2. de tovább is mehetsz NYUGATNAK.\n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if temp_choose == 1:
+                n220()
+                break
+            elif temp_choose == 2:
+                n362()
+                break
+            else:
+                print("Érvénytelen választás!")
+                continue
+    player_help()
 
 
 def n207():
@@ -255,6 +361,15 @@ def n207():
     hero_gold[0] = hero_gold[0] + 2
     player_help()
     n66()
+
+
+def n220():
+    n0()
+
+
+def n279():  # Ez az ág eddig tartott
+    print("Elágazáshoz érsz. Egy új ág nyugatnak vezet, de a nedves lábnyomok, amelyeket követtél, \ntovábbra is észak felé haladnak. Úgy döntesz, hogy továbbra is a lábnyomokat löveted.")
+    n0()
 
 
 def n293():
@@ -276,6 +391,47 @@ def n293():
             else:
                 print("Érvénytelen választás!")
                 continue
+
+
+def n298():
+    print("Egy hátizsákot látsz az alagút falának támasztva. Kíváncsi vagy, vajon vetélytársaid egyikéé-e. Mit teszel?")
+    player_help()
+    while True:
+        try:
+            temp_choose = int(input("\n1. Belenézel \n2. Tovább mész északnak\n"))
+        except ValueError:
+            print("A megadott szám érvénytelen!")
+            continue
+        else:
+            if temp_choose == 1:
+                n304()
+                break
+            elif temp_choose == 2:
+                n279()
+                break
+            else:
+                print("Érvénytelen választás!")
+                continue
+
+
+def n304():
+    print("Mindössze egy Aranyérme fekszik a hátizsák mélyén. Ahogy érte nyúlsz, valami hirtelen enyhén csiklandozni kezdi a kézfejedet. \nLassan visszahúzod a kezedet, s megpróbálsz uralkodni növekvő pánikodon. Rémülten látod, hogy egy pók, a Fekete Özvegy mászott a kezedre. \nMielőtt lerázhatnád, mérgével mélyen belemar a csuklódba. 6 ÉLETERŐ pontot veszítesz.")
+    hero_stam[0] = int(hero_stam[0]) - int(6)
+    if int(hero_stam[0]) > int(0):
+        n20()
+    else:
+        print("Életerőd elfogyott és meghaltál!")
+        lose()
+
+
+def n336():
+    print("A csuklóvédőt egy boszorkány készítette - és átkozta meg. Lelassítja reakcióidat, és tompítja érzékeidet. \n4 ponttal csökkenti ÜGYESSÉGED. Dühödten az alagút falába rúgsz, ÉSZAKNAK csörtetsz.")
+    hero_stg[0] = int(hero_stg[0]) - int(4)
+    n298()
+
+
+def n362():
+    n0()
 
 
 def n387():
