@@ -1,2 +1,3 @@
-# Koedrin
-1str of my
+Hello!
+
+Ide gyüjtöm fejlődésem lépéseit, eredményeimet.
