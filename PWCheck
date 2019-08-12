@@ -1,0 +1,76 @@
+given_pass = [0]  # Tárolja a felhasználó jelszavát
+hibalista = []    # A listra gyűjti a hibákat.
+failed = [0]      # A lista tárolja, történt e hiba. 1-es érték esetén a jeszót érvénytelennek veszi.
+
+
+def main():
+    print("Kérlek adja meg új jelszavát,\n"
+          "a jelszónak legalább 8 karakter hosszúnak kell lennie,\n"
+          "tartalmaznia kell számot, kis és nagy betűt, valamint speciális karaktert.\n"
+          "A jelszó legfelejebb 16 karakter hosszú lehet.\n")
+    given_pass[0] = str(input("A választott jelszó:\n"))
+    lenght_check()
+    number_check()
+    specials_check()
+    case_check()
+
+
+def lenght_check():
+    if len(given_pass[0]) >= int(8) and len(given_pass[0]) <= int(16):
+        print("A jelszó megfelelően hosszú")
+    else:
+        hibalista.append("A jelszó nem megfelelő hosszúságú")
+        failed[0] = int(failed[0]) + int(1)
+
+
+def number_check():
+    if str(0 or 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9) in str(given_pass[0]):
+        print("A jelszó tartalmaz számjegyet")
+    else:
+        hibalista.append("A jelszó nem tartalmaz számjegyet")
+        failed[0] = int(failed[0]) + int(1)
+
+
+def specials_check():
+    if given_pass[0].isalnum():
+        hibalista.append("A jelszó nem tartalmaz speciális karaktert")
+        failed[0] = int(failed[0]) + int(1)
+    else:
+        print("A jelszó tartalmas speciális karaktert")
+
+
+def case_check():
+    upper_counter = 0
+    lower_counter = 0
+    for a in str(given_pass[0]):
+        if (a.isupper()) == True:
+            upper_counter = upper_counter + 1
+        elif (a.islower()) == True:
+            lower_counter = lower_counter + 1
+        else:
+            pass
+    if int(upper_counter) == int(0):
+        hibalista.append("A jelszó nem tartalmaz nagybetűt")
+        failed[0] = int(failed[0]) + int(1)
+    elif int(lower_counter) == int(0):
+        hibalista.append("A jelszó nem tartalmaz kisbetűt")
+        failed[0] = int(failed[0]) + int(1)
+    else:
+        print("a jelszó kis és nagy betűt is tartalmaz")
+
+
+def fail():
+    print("\nA MEGADOTT JELSZÓ NEM FELEL MEG AZ ELVÁRÁSOKNAK!:")
+    print(str(hibalista) + "\n")
+
+
+def okay():
+    print("\nA JELSZÓ ELFOGADVA!\n")
+
+
+main()
+if int(failed[0]) == 0:
+    okay()
+else:
+    fail()
+    
