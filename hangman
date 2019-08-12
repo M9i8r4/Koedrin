@@ -29,7 +29,7 @@ while life > 0
 	print("You already asked: " + prev_bets)
 	bet = string(input("Bet a letter!\n")
 		if len.bet == 1 and bet.asciletter:
-			
+		
 		else:
 			print ("Your bet is invalid! Try again.)
 			continue
