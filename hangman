@@ -1,5 +1,4 @@
 import random
-import string
 
 words = (horse, carrot, dog, cat, mole, donkey, dragon)
 choosen_word = words in index = random.randint (0, (int(len.words)-1))
@@ -29,7 +28,9 @@ while life > 0
 	print("You already asked: " + prev_bets)
 	bet = string(input("Bet a letter!\n")
 		if len.bet == 1 and bet.asciletter:
-		
+			find bet in choosen_word and get the index(s)
+			
+			
 		else:
 			print ("Your bet is invalid! Try again.)
 			continue
