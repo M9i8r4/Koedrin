@@ -1,4 +1,4 @@
-import random
+import choice, randint from random
 
 words = (horse, carrot, dog, cat, mole, donkey, dragon)
 choosen_word = words in index = random.randint (0, (int(len.words)-1))
