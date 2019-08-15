@@ -1,0 +1,54 @@
+import random
+import sys
+from time import sleep
+
+words = ["horse", "carrot", "dog", "cat", "mole", "donkey", "dragon"]
+choosen_word = random.choice(words)
+life = 10
+bets = []
+won_or_not = [0]
+
+print("Let's paly hangman! I choose a word...")
+sleep(1)
+print("My word counts " + str(len(choosen_word)) + " letters.")
+sleep(1)
+
+def final ():
+    print("This was fun! See you next time")
+    sleep(5)
+    sys.exit(0)
+
+while int(life)>0:
+    sleep(1)
+    print("You have " + str(life) + " life left!")
+    guess = input("Take your bet:\n")
+    if len(guess) == 1 and guess.isalpha():
+        if guess in bets:
+            print("You already bet this one.")
+            continue
+        else:
+            bets.append(guess)
+            if guess in choosen_word:
+                won_or_not[0] = int(0)
+                for char in choosen_word:
+                    if char in bets:
+                        sys.stdout.write (char)
+                    else:
+                        sys.stdout.write (" _ ")
+                        won_or_not[0] = won_or_not[0] + 1
+                print("\n")
+                if won_or_not[0] == int(0):
+                    print("YOU WON!")
+                    final()
+            else:
+                life = int(life) - 1
+                print("Your guess is not in my word!")
+    else:
+        print("Invalid bet character!")
+    sleep(0.5)
+    print("You already told these letters: " + str(bets))
+
+print("GAME OVER")
+sleep(0.5)
+print("My word was: " + choosen_word + "\n Better luck next time.")
+
