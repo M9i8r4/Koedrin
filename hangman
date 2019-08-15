@@ -1,34 +1,32 @@
-import choice, randint from random
+from random import choice, randint
 
-words = (horse, carrot, dog, cat, mole, donkey, dragon)
-choosen_word = words in index = random.randint (0, (int(len.words)-1))
+words = [horse, carrot, dog, cat, mole, donkey, dragon]
+words_count = int(len.words)
+choosen_wordindex = random.randint (0, (int(wods_count) - 1))
+chossen_word = words[int(choosen_wordindex)]
+life = [10]
 prev_bets = []
-life = 10
-state = [_________________________________,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	|                                 |,
-	 _________________________________,]
 
-def print_state(life):
-	print (state)
+
+def try_letter (bet):
+	if choosen_wold.count('bet') > 0:
+	...
+	else:
+	print("Wrong bet!)
+	life[0] = life[0] - 1
+	print_state ()
+
+
+
+
+
+
+
+def print_state:
+
 	print (life + "LIFE LEFT!")
 
-while life > 0
-	print("You already asked: " + prev_bets)
-	bet = string(input("Bet a letter!\n")
-		if len.bet == 1 and bet.asciletter:
-			find bet in choosen_word and get the index(s)
+
 			
 			
 		else:
