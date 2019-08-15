@@ -8,7 +8,7 @@ life = 10
 bets = []
 won_or_not = [0]
 
-print("Let's paly hangman! I choose a word...")
+print("Let's play hangman! I choose a word...")
 sleep(1)
 print("My word counts " + str(len(choosen_word)) + " letters.")
 sleep(1)
@@ -51,4 +51,5 @@ while int(life)>0:
 print("GAME OVER")
 sleep(0.5)
 print("My word was: " + choosen_word + "\n Better luck next time.")
+sleep(5)
 
