@@ -7,8 +7,7 @@ Ide gyüjtöm fejlődésem lépéseit, eredményeimet.
                       
 2. PWCheck:           A minden weblapról ismert jelszó erősség ellenőrző kódsór, mely annyiban bővebb, hogy az elkövetett hibát is jelzi.
 
-3. Hangman:           Akasztófa játék, mely váletlenszerűen választott szóval játszható. 
-                      A játék alapvető grafikával jelzi a játék állását.
+3. Hangman:           Akasztófa játék, mely váletlenszerűen választott szóval játszható.
                       
 4. Ceasar Ciphers:    A Start.txt dokumentumben szereplő szöveg valamennyi betűjét elcsúsztatja az ABC-ben egy betűvel,
                       és az így keletkező titkosírást a Final.txt-e visszamenti.
