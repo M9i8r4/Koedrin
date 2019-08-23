@@ -1,0 +1,33 @@
+import random
+
+mynum = random.randint(999,9999)
+state_number_well_placed = [0]
+state_number_bad_placed = [0]
+state_number_not_placed = [0]
+playing = state_number_well_placed[0] < 4
+
+def number_test():
+    print(mynum)
+    while playing:
+        state_number_well_placed[0] = 0
+        state_number_bad_placed[0] = 0
+        state_number_not_placed[0] = 0
+        player_guess = input("Take your bet:\n")
+        if len(player_guess) == 4 and player_guess.isnumeric():
+            for char in str(player_guess):
+                if char in mynum:
+                    if mynum[i] == player_guess[i]:
+                        state_number_well_placed[0] += 1
+                    else:
+                        state_number_bad_placed[0] += 1
+                else:
+                    state_number_not_placed[0] += 1
+        else:
+            print("Your bet must be a four digit number!")
+        print("From the digits of the given number " + str(state_number_well_placed[0]) + " is well placed.")
+        print("From the digits of the given number " + str(state_number_bad_placed[0]) + " is badly placed.")
+        print("From the digits of the given number " + str(state_number_not_placed[0]) + " is not in my number")
+
+
+print("I choosed a four digit number, can you find it out?")
+number_test()
